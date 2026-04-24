@@ -12,17 +12,17 @@ export const SIDE_MENU_ITEMS: SideMenuItem[] = [
   {
     id: "dashboard",
     pathname: ROUTE_PATH.DASHBOARD,
-    label: "Dashboard",
+    label: "Дашборд",
     children: [
       {
         id: "users",
         pathname: ROUTE_PATH.USERS,
-        label: "Users",
+        label: "Пользователи",
         children: [
           {
             id: "user",
             pathname: ROUTE_PATH.USER_DETAILS,
-            label: "User Details",
+            label: "Детали",
             showIfMatched: true,
           },
         ],

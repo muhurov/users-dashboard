@@ -1,6 +1,7 @@
 import Link from "next/link";
 
 import { ROUTE_PATH, SideMenuItem } from "@/shared/config";
+import { getIsPathnameMatched } from "@/shared/lib";
 
 export type MenuItemProps = {
   item: SideMenuItem;
@@ -9,14 +10,16 @@ export type MenuItemProps = {
 };
 
 export const MenuItem = ({ item, pathname, depth = 0 }: MenuItemProps) => {
-  const pattern = new URLPattern({ pathname: ROUTE_PATH.USER_DETAILS });
-  const matched = pattern.test({ pathname: `${pathname}` });
+  const isPathnameMatched = getIsPathnameMatched(
+    ROUTE_PATH.USER_DETAILS,
+    `${pathname}`,
+  );
 
-  if (item.showIfMatched && !matched) return null;
+  if (item.showIfMatched && !isPathnameMatched) return null;
 
   const isActive =
-    pathname === item.pathname || (item.showIfMatched && matched);
-  const isParentOfActive = matched && !isActive;
+    pathname === item.pathname || (item.showIfMatched && isPathnameMatched);
+  const isParentOfActive = isPathnameMatched && !isActive;
 
   return (
     <>
