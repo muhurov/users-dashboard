@@ -11,15 +11,23 @@ export type UsersResponse = {
 
 export type UserQuery = {
   search?: string;
+  page?: number;
+  limit?: number;
 };
 
 export const userApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
     getUsers: builder.query<UsersResponse, UserQuery>({
-      query: ({ search }) => {
-        if (!search) return "/users";
-
-        return `/users/search?q=${search}`;
+      query: ({ search, page, limit }) => {
+        console.log("query", search, page, limit);
+        return {
+          url: `/users${search ? "/search" : ""}`,
+          params: {
+            ...(search && { q: search }),
+            ...(page && limit && { skip: (page - 1) * limit }),
+            limit,
+          },
+        };
       },
       providesTags: ["User"],
       keepUnusedDataFor: 0,
@@ -27,9 +35,10 @@ export const userApi = baseApi.injectEndpoints({
     getUserById: builder.query<User, string>({
       query: (id) => `/users/${id}`,
       providesTags: (result, error, id) => [{ type: "User", id }],
+      keepUnusedDataFor: 0,
     }),
   }),
-  overrideExisting: false,
+  overrideExisting: true,
 });
 
 export const { useGetUsersQuery, useGetUserByIdQuery } = userApi;
