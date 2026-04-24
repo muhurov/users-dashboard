@@ -12,7 +12,7 @@ export default function DashboardLayout({ children }: { children: ReactNode }) {
           <div className="w-8 h-8 bg-gray-200 rounded-full" />
         </header>
         <section className="flex-1 overflow-y-auto p-8">
-          <div className="max-w-5xl">{children}</div>
+          <div className="flex max-w h-full">{children}</div>
         </section>
       </main>
     </div>

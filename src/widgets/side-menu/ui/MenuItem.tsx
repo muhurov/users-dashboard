@@ -1,7 +1,6 @@
-import { ChevronDown } from "lucide-react";
 import Link from "next/link";
 
-import { SideMenuItem } from "@/shared/config";
+import { ROUTE_PATH, SideMenuItem } from "@/shared/config";
 
 export type MenuItemProps = {
   item: SideMenuItem;
@@ -10,10 +9,14 @@ export type MenuItemProps = {
 };
 
 export const MenuItem = ({ item, pathname, depth = 0 }: MenuItemProps) => {
-  if (item.showIfMatched && !pathname?.startsWith(item.pathname)) return null;
+  const pattern = new URLPattern({ pathname: ROUTE_PATH.USER_DETAILS });
+  const matched = pattern.test({ pathname: `${pathname}` });
 
-  const isActive = pathname === item.pathname;
-  const isParentOfActive = pathname?.startsWith(item.pathname) && !isActive;
+  if (item.showIfMatched && !matched) return null;
+
+  const isActive =
+    pathname === item.pathname || (item.showIfMatched && matched);
+  const isParentOfActive = matched && !isActive;
 
   return (
     <>
@@ -21,7 +24,7 @@ export const MenuItem = ({ item, pathname, depth = 0 }: MenuItemProps) => {
         href={item.pathname}
         className={`block px-4 py-2 rounded-lg transition-colors ${
           isActive
-            ? "bg-blue-50 text-blue-700 font-medium"
+            ? "bg-blue-50 text-blue-700 font-bold"
             : isParentOfActive
               ? "text-blue-600 font-medium"
               : "text-gray-600 hover:bg-gray-100"
