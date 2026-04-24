@@ -1,36 +1,88 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 🚀 User Dashboard Project
 
-## Getting Started
+Современное веб-приложение на стеке Next.js 16, React, TypeScript и Redux Toolkit (RTK Query), построенное по методологии Feature-Sliced Design (FSD).
 
-First, run the development server:
+---
+
+## ⚠️ ВАЖНО: ПЕРЕД ЗАПУСКОМ
+
+Для корректной работы приложения с API необходимо настроить переменные окружения:
+
+1. Надите в корне проекта файл **`.env.example`**.
+2. Переименуйте его в **`.env.local`** (или создайте копию с этим именем).
+3. Убедитесь, что переменная `NEXT_PUBLIC_API_URL` содержит актуальный адрес бэкенда (https://dummyjson.com/).
+
+> **Примечание:** Файл `.env.local` игнорируется системой Git и предназначен для ваших локальных настроек. Никогда не коммитьте его в репозиторий.
+
+---
+
+## 🛠 Инструкция по запуску
+
+### 1. Установка зависимостей
+Убедитесь, что у вас установлена Node.js версии 18 или выше. Используйте `npm` (или `yarn`/`pnpm`) для установки пакетов:
+
+```bash
+npm install
+```
+
+### 2. Запуск в режиме разработки
+Запустите локальный сервер с поддержкой Hot Reload:
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
+После запуска приложение будет доступно по адресу: [http://localhost:3000](http://localhost:3000)
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### 3. Сборка и проверка Production-версии
+Чтобы проверить, как приложение работает в "боевом" режиме (проверка гидратации, оптимизация бандла):
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```bash
+# Сборка проекта
+npm run build
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+# Запуск собранного бандла
+npm run start
+```
+После запуска приложение будет доступно по адресу: [http://localhost:3000](http://localhost:3000)
 
-## Learn More
+---
 
-To learn more about Next.js, take a look at the following resources:
+## 🏗 Архитектура и стек
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Проект следует архитектуре **FSD (Feature-Sliced Design)**:
+- **app/** — инициализация приложения, провайдеры, глобальные стили и роутинг.
+- **views/** — композиция страниц (бывший слой pages).
+- **widgets/** — крупные самостоятельные блоки (SideBar, Header, Breadcrumbs).
+- **features/** — действия пользователя (фильтрация, поиск).
+- **entities/** — бизнес-сущности (User) и логика API (RTK Query).
+- **shared/** — переиспользуемые UI-компоненты, утилиты и конфиги.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+**Основные технологии:**
+*   **Next.js 16** (App Router)
+*   **Redux Toolkit** & **RTK Query** (State management & Data fetching)
+*   **Tailwind CSS** (Styling)
+*   **Lucide React** (Icons)
+*   **URLPattern API** (Advanced routing logic)
 
-## Deploy on Vercel
+---
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## ✅ Решения
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- На списке пользователей отображаются всего несколько полей: аватар, полное имя, email, роль и возраст - исключительно в демонстрационных целях. Полный набор нужных полей нужно составлять в зависимости от специфики проекта и/или бизнес-требований (на странице пользователя - то же самое)
+- Из фильтров был сделан только поиск по имени из-за специфики построения эндпоинтов, остальные можно добавлять после утверждения полей для отображения на странице
+- В виде временного решения были организованы редиректы со страниц `/`, `/dashboard` на `/dashboard/users`, в будущем по мере расширения функционала и добавления новых страниц, редиректы можно снять
+- Панель главного бокового меню была добавлена для удобства навигации, стилизацией не занимался
+- Был добавлен Breadcrumb (UX + доп. навигация)
+- Дизайн систему не добавлял, поскольку пока что нет общего видения картины в плане нужного набора компонентов, соответственно, не было понимания, какой лучше может подойти с учетом дальнейшего расширения функционала.
+- Пагинация добавлена в самом базовом виде - для демонстрации работы
+
+---
+
+## ⏳ TODOs
+
+- Добавить обработку 401/403/500 ошибок
+- Добавить Cards View/Table View на страницу со списком пользователей (Table View - удобно, если нужно много важной информации)
+- После инвестигейта дополнить список полей для фильтрации
+- Подумать о том, чтобы добавить Virtual List для списка пользователей вместо привычной пагинации
+- Доработать стили - disabled states/hover/fonts/gaps
+- Переделать пагинацию в более гибкий вариант с возможностью выбора номера страницы и количества отображаемых записей
